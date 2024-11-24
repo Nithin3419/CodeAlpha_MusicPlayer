@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muisc player-Nithin</title>
+    <style>
+        *,
+*::before,
+::after {
+    padding: 0%;
+    margin: 0%;
+    box-sizing: border-box;
+}
+html{
+    font-size: 62.5%;
+    font-family: "jost",sans-serif;
+}
+.main_div{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f6f6f6;
+    display: grid;
+    place-items: center;
+}
+.music_container{
+    width: 35rm;
+    height: 55rem;
+    background-color: #ffffff;
+    border-radius: 2rem;
+    box-shadow: 0 1.2rem 3rem 0.5rem rgba(0, 0, 0, 0.2);
+    padding: 3rem;
+    text-align: center;
+}
+.music_container #title{
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    word-spacing: 0.5rem;
+    color: #171717;
+    margin: 2rem 0 0.5rem 0;
+    font-size: 2.5rem;
+    font-weight: 500;
+    text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 3.5);
+}
+.music_container #artist{
+    color: #cccaca;
+    text-transform: capitalize;
+    letter-spacing: 0.1rem;
+    font-size: 2rem;
+    margin-bottom: 4rem;
+    padding-top: 1rem;
+    font-weight: 300;
+}
+.img-container{
+    width: 25rem;
+    height: 25rem;
+    margin: auto;
+    padding-bottom: 4rem;
+}
+img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    box-shadow: 0 1.2rem 3rem 0.5rem rgba(0, 0, 0, 0.4);
+}
+.music_controls{
+    width: 20rem;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+   align-items: center;
+}
+.music_controls .fas{
+    color: #111111;
+    font-size: 2rem;
+    cursor: pointer;
+    filter: drop-shadow(0 1.2rem 3rem 0.5rem rgba(0,0,0,0.4));
+}
+.music_controls .main_button{
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background-color: #111111;
+    color: #f6f6f6;
+    font-size: 1.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.music_controls .fas:hover{
+    color: gray;
+}
+.music_controls .fa-play:hover{
+    background-color: #f6f6f6;
+    color: #111;
+    box-shadow: 0 1rem 2rem 0.2rem rgba(0, 0, 0, 0.4);
+}
+.anime{
+    animation: rotateplayer 3s linear infinite;
+}
+@keyframes rotateplayer {
+    from {
+    transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css" integrity="sha512-9xKTRVabjVeZmc+GUW8GgSmcREDunMM+Dt/GrzchfN8tkwHizc5RP4Ok/MXFFy5rIjJjzhndFScTceq5e6GvVQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="main_div">
+        <div class="music_container">
+            <h2 id="title">Cheppave Chirugali</h2>
+            <h3 id="artist">sri Ram</h3>
+            <div class="img-container">
+                <img src="image/okkadu.jpg">
+            </div>  
+            <audio src="music/03 - Cheppave Chirugali - SenSongsMp3.co.mp3" ></audio>
+            <div class="music_controls">
+                <i class="fa-solid fa-backward fas" id="prev" title="prev"></i>
+                <i class="fa-solid fa-play main_button fas" id="play" title="play"></i>
+                <i class="fa-solid fa-forward fas" id="next" title="next"></i>
+            </div>
+        </div>
+    </div>
+    <script>
+        const music =document.querySelector("audio");   
+        const img =document.querySelector("img");
+        const play =document.getElementById("play");
+        const artist =document.getElementById("artist");
+        const title =document.getElementById("title");
+        const prev =document.getElementById("prev");
+        const next =document.getElementById("next");
+
+       const songs= [
+        {
+        name:"Okkadu",
+        title: "Cheppave Chirugali",
+        artist: "Sri Ram",
+       },
+        {
+        name:"devara",
+        title: "All Hail The Tiger",
+        artist: "Anirudh",
+       },
+        {
+        name:"pagal",
+        title: "Saradaga kasepaina",
+        artist: "Mani",
+       },
+    ]
+        let isplaying =false;
+        // for play function
+        const playMusic =()=>{
+            isplaying= true;
+            music.play();
+            play.classList.replace('fa-play',"fa-pause");
+            img.classList.add("anime");
+        };
+        // for pause function
+        const pauseMusic=() =>{
+            isplaying= false;
+            music.pause();
+            play.classList.replace("fa-pause",'fa-play');
+            img.classList.remove("anime");
+        };
+        play.addEventListener("click",() =>{
+            if(isplaying){
+                pauseMusic();
+            }else{
+                playMusic();
+            }
+        });
+
+        //changing the music
+        const loadSong= (songs) =>{
+            title.textContent =songs.title;
+            artist.textContent =songs.artist;
+            music.src = "music/" + songs.title + ".mp3" ;
+            img.src= "image/" + songs.name + ".jpg" ;
+        };
+
+        songIndex = 0;
+        //loadSong(songs[2]);
+
+        const nextSong = () => {
+            songIndex = (songIndex +1 ) % songs.length;
+            loadSong(songs[songIndex]);
+            playMusic();
+        }
+        const prevSong = () => {
+            songIndex = (songIndex - 1 +  songs.length) % songs.length;
+            loadSong(songs[songIndex]);
+            playMusic();
+        }
+        next.addEventListener("click",nextSong);
+        prev.addEventListener("click",prevSong);
+    </script>
+</body>
+</html>
